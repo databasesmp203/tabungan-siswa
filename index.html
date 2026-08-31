@@ -1,8 +1,12 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>TabungKu Smart Banking - Sistem Perbankan Sekolah Pro</title>
   
   <!-- Tailwind CSS -->
@@ -19,6 +23,8 @@
   <style>
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      overscroll-behavior-y: none;
     }
     .font-passbook {
       font-family: 'Courier Prime', monospace;
@@ -69,6 +75,26 @@
     .theme-blue { background: linear-gradient(135deg, #0f172a, #1e3a8a, #1e40af); color: #93c5fd; }
     .theme-maroon { background: linear-gradient(135deg, #450a0a, #7f1d1d, #991b1b); color: #fef08a; }
     .theme-black { background: linear-gradient(135deg, #090d16, #1e293b, #0f172a); color: #f59e0b; }
+
+    /* Touch Feedback & Mobile Optimizations */
+    button, input, select {
+      touch-action: manipulation;
+    }
+
+    .active-scale {
+      transition: transform 0.1s ease;
+    }
+    .active-scale:active {
+      transform: scale(0.96);
+    }
+
+    /* Safe Area Padding for Modern Mobile Devices (Notch / Home Indicator) */
+    .pb-safe {
+      padding-bottom: env(safe-area-inset-bottom, 16px);
+    }
+    .pt-safe {
+      padding-top: env(safe-area-inset-top, 0px);
+    }
 
     /* MEDIA PRINTER / CETAK (CTRL + P) */
     @media print {
@@ -127,8 +153,8 @@
 
     /* Custom scrollbar */
     ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+      width: 4px;
+      height: 4px;
     }
     ::-webkit-scrollbar-track {
       background: #f1f5f9;
@@ -137,35 +163,32 @@
       background: #cbd5e1;
       border-radius: 4px;
     }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
-    }
   </style>
 </head>
-<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col pb-20 md:pb-0">
 
-  <!-- HEADER UTAMA -->
-  <header class="bg-slate-900 text-white sticky top-0 z-30 shadow-md no-print">
+  <!-- HEADER UTAMA MOBILE & DESKTOP -->
+  <header class="bg-slate-900 text-white sticky top-0 z-30 shadow-md pt-safe no-print">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
-        <div class="flex items-center gap-3">
-          <div class="bg-emerald-500 p-2 rounded-xl text-slate-900 shadow-lg font-bold text-lg flex items-center justify-center w-10 h-10 cursor-pointer" id="app-logo-badge" onclick="switchTab('passbook')">
+        <div class="flex items-center gap-2.5">
+          <div class="bg-emerald-500 p-2 rounded-xl text-slate-900 shadow-lg font-bold text-lg flex items-center justify-center w-10 h-10 cursor-pointer active-scale" id="app-logo-badge" onclick="switchTab('passbook')">
             🏦
           </div>
           <div>
-            <h1 class="text-lg font-bold leading-none text-white flex items-center gap-2">
-              Tabung<span class="text-emerald-400">Ku</span> Smart Banking Pro
-              <span id="cloud-sync-badge" onclick="openModalSync()" class="cursor-pointer text-[10px] bg-slate-800 text-amber-400 px-2 py-0.5 rounded-full border border-amber-500/30 flex items-center gap-1 hover:bg-slate-700 transition" title="Klik untuk Pengaturan Sync Cloud Google Sheets / API">
+            <h1 class="text-base sm:text-lg font-bold leading-none text-white flex items-center gap-1.5">
+              Tabung<span class="text-emerald-400">Ku</span> <span class="hidden xs:inline">Smart Banking</span>
+              <span id="cloud-sync-badge" onclick="openModalSync()" class="cursor-pointer text-[9px] sm:text-[10px] bg-slate-800 text-amber-400 px-2 py-0.5 rounded-full border border-amber-500/30 flex items-center gap-1 hover:bg-slate-700 transition" title="Klik untuk Pengaturan Sync Cloud Google Sheets / API">
                 <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Offline/Local
               </span>
             </h1>
-            <p class="text-xs text-slate-400 mt-0.5">Sistem Perbankan Sekolah & Pencetakan Passbook Versi 2.0</p>
+            <p class="text-[10px] sm:text-xs text-slate-400 mt-0.5">Perbankan Sekolah & Passbook Pro</p>
           </div>
         </div>
 
         <div class="flex items-center gap-2">
-          <button onclick="toggleAudio()" id="btn-sound-toggle" class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs border border-slate-700 transition" title="Aktifkan/Matikan Suara Audio Teller">
-            🔊 Suara: ON
+          <button onclick="toggleAudio()" id="btn-sound-toggle" class="p-2 bg-slate-800 hover:bg-slate-700 active-scale text-slate-300 rounded-xl text-xs border border-slate-700 transition" title="Aktifkan/Matikan Suara Audio Teller">
+            🔊 <span class="hidden sm:inline">Suara: ON</span>
           </button>
 
           <div class="hidden sm:flex items-center gap-2 bg-slate-800/80 border border-slate-700 rounded-xl px-3 py-1.5 text-xs">
@@ -173,15 +196,15 @@
             <span id="header-total-balance" class="font-extrabold text-emerald-400">Rp 0</span>
           </div>
           
-          <button onclick="openModalNewStudent()" class="px-3.5 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-extrabold text-xs rounded-xl flex items-center gap-1.5 shadow transition">
-            ➕ Buka Rekening Baru
+          <button onclick="openModalNewStudent()" class="px-3 py-2 bg-emerald-500 hover:bg-emerald-400 active-scale text-slate-900 font-extrabold text-xs rounded-xl flex items-center gap-1 shadow transition">
+            ➕ <span class="hidden sm:inline">Buka Rekening Baru</span><span class="sm:hidden">Siswa</span>
           </button>
         </div>
       </div>
     </div>
 
-    <!-- SUB-NAVIGASI TAB -->
-    <div class="bg-slate-800 border-t border-slate-700/60 px-4 sm:px-6 lg:px-8">
+    <!-- SUB-NAVIGASI TAB DESKTOP -->
+    <div class="hidden md:block bg-slate-800 border-t border-slate-700/60 px-4 sm:px-6 lg:px-8">
       <div class="max-w-7xl mx-auto flex space-x-2 py-2 overflow-x-auto scrollbar-none">
         <button onclick="switchTab('passbook')" id="btn-tab-passbook" class="nav-tab px-4 py-2 rounded-lg text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 whitespace-nowrap">
           📖 Cetak Buku Bank (210x150mm)
@@ -205,20 +228,48 @@
     </div>
   </header>
 
-  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+  <!-- BOTTOM NAVIGATION BAR KHUSUS ANDROID / MOBILE -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 z-40 px-2 py-1.5 pb-safe flex justify-around items-center no-print shadow-lg">
+    <button onclick="switchTab('transaction')" id="btn-mob-transaction" class="mob-nav-tab flex flex-col items-center py-1 px-2 rounded-xl text-[10px] font-bold text-emerald-400 bg-emerald-500/10 active-scale">
+      <span class="text-lg leading-none">⚡</span>
+      <span class="mt-1">Teller</span>
+    </button>
+    <button onclick="switchTab('students')" id="btn-mob-students" class="mob-nav-tab flex flex-col items-center py-1 px-2 rounded-xl text-[10px] font-bold text-slate-400 active-scale">
+      <span class="text-lg leading-none">👥</span>
+      <span class="mt-1">Nasabah</span>
+    </button>
+    <button onclick="switchTab('passbook')" id="btn-mob-passbook" class="mob-nav-tab flex flex-col items-center py-1 px-2 rounded-xl text-[10px] font-bold text-slate-400 active-scale">
+      <span class="text-lg leading-none">📖</span>
+      <span class="mt-1">Passbook</span>
+    </button>
+    <button onclick="switchTab('card')" id="btn-mob-card" class="mob-nav-tab flex flex-col items-center py-1 px-2 rounded-xl text-[10px] font-bold text-slate-400 active-scale">
+      <span class="text-lg leading-none">💳</span>
+      <span class="mt-1">Kartu PVC</span>
+    </button>
+    <button onclick="switchTab('reports')" id="btn-mob-reports" class="mob-nav-tab flex flex-col items-center py-1 px-2 rounded-xl text-[10px] font-bold text-slate-400 active-scale">
+      <span class="text-lg leading-none">📊</span>
+      <span class="mt-1">Laporan</span>
+    </button>
+    <button onclick="switchTab('design')" id="btn-mob-design" class="mob-nav-tab flex flex-col items-center py-1 px-2 rounded-xl text-[10px] font-bold text-slate-400 active-scale">
+      <span class="text-lg leading-none">🎨</span>
+      <span class="mt-1">Desain</span>
+    </button>
+  </nav>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6 lg:p-8 space-y-4 sm:space-y-6">
 
     <!-- TAB 1: PASSBOOK PRINTING -->
-    <div id="tab-passbook" class="tab-content space-y-6">
-      <div class="no-print bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+    <div id="tab-passbook" class="tab-content space-y-6 hidden md:block">
+      <div class="no-print bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 pb-4">
           <div>
-            <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+            <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
               📖 Cetak Buku Tabungan Fisik Bank (210mm x 150mm)
             </h2>
             <p class="text-xs text-slate-500">Atur mode pencetakan dan posisi baris awal pada buku tabungan fisik (Epson PLQ / Olivetti / Kertas biasa).</p>
           </div>
-          <div class="flex items-center gap-2">
-            <button onclick="triggerPrint()" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-extrabold text-xs rounded-xl shadow-md transition flex items-center gap-2">
+          <div class="flex items-center gap-2 w-full md:w-auto">
+            <button onclick="triggerPrint()" class="w-full md:w-auto px-5 py-3 bg-emerald-500 hover:bg-emerald-600 active-scale text-slate-900 font-extrabold text-xs rounded-xl shadow-md transition flex items-center justify-center gap-2">
               🖨️ Cetak Buku Sekarang (Ctrl+P)
             </button>
           </div>
@@ -227,7 +278,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
           <div>
             <label class="block font-bold text-slate-700 mb-1">Halaman Cetak</label>
-            <select id="passbook-view-mode" onchange="renderPassbook()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none">
+            <select id="passbook-view-mode" onchange="renderPassbook()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none">
               <option value="COVER_OUTER">1. Sampul Depan Emas</option>
               <option value="INSIDE_COVER">2. Sampul Dalam (Identitas + Foto Siswa)</option>
               <option value="MUTATION_PAGE" selected>3. Lembar Mutasi Transaksi</option>
@@ -236,7 +287,7 @@
 
           <div>
             <label class="block font-bold text-slate-700 mb-1">Target Media Cetak</label>
-            <select id="passbook-print-style" onchange="renderPassbook()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none">
+            <select id="passbook-print-style" onchange="renderPassbook()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none">
               <option value="FULL_PREVIEW">Lengkap + Bingkai (Kertas A4 / Biasa)</option>
               <option value="TEXT_ONLY" selected>Teks Murni (Cetak di Buku Fisik)</option>
             </select>
@@ -244,13 +295,13 @@
 
           <div>
             <label class="block font-bold text-slate-700 mb-1">Pilih Nasabah Siswa</label>
-            <select id="passbook-student-select" onchange="renderPassbook()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none">
+            <select id="passbook-student-select" onchange="renderPassbook()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none">
             </select>
           </div>
 
           <div>
             <label class="block font-bold text-slate-700 mb-1">Mulai Baris Cetak (Line Offset)</label>
-            <select id="passbook-line-offset" onchange="renderPassbook()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none">
+            <select id="passbook-line-offset" onchange="renderPassbook()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none">
               <option value="1">Baris ke-1 (Awal Halaman)</option>
               <option value="2">Baris ke-2</option>
               <option value="3">Baris ke-3</option>
@@ -270,56 +321,53 @@
 
       <!-- Container Lembar Passbook -->
       <div class="print-container flex justify-center py-2 overflow-x-auto">
-        <div id="passbook-sheet-container" class="shadow-2xl rounded-sm">
+        <div id="passbook-sheet-container" class="shadow-2xl rounded-sm scale-90 sm:scale-100 origin-top">
         </div>
       </div>
     </div>
 
-    <!-- TAB 2: TELLER & SCANNER BARCODE KAMERA -->
-    <div id="tab-transaction" class="tab-content space-y-6 hidden no-print">
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-2 space-y-6">
+    <!-- TAB 2: TELLER & SCANNER BARCODE KAMERA (OPTIMIZED FOR MOBILE) -->
+    <div id="tab-transaction" class="tab-content space-y-4 sm:space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div class="lg:col-span-2 space-y-4 sm:space-y-6">
           <!-- Card & Camera Scanner Box -->
-          <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-md space-y-4">
+          <div class="bg-slate-900 text-white rounded-2xl p-4 sm:p-6 shadow-md space-y-3 sm:space-y-4">
             <div class="flex items-center justify-between">
-              <h3 class="font-bold text-sm text-white flex items-center gap-2">
-                💳 Scanner Barcode / Tap ID Card Siswa
+              <h3 class="font-bold text-xs sm:text-sm text-white flex items-center gap-1.5">
+                💳 Barcode / Tap ID Card Siswa
               </h3>
               <div class="flex items-center gap-2">
-                <button onclick="toggleCameraScanner()" id="btn-camera-toggle" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-lg transition flex items-center gap-1">
+                <button onclick="toggleCameraScanner()" id="btn-camera-toggle" class="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 active-scale text-white text-xs font-bold rounded-xl transition flex items-center gap-1 shadow">
                   📷 Kamera Belakang
                 </button>
-                <span class="text-[10px] bg-slate-800 text-emerald-400 font-mono px-2.5 py-1 rounded-full border border-emerald-500/30 flex items-center gap-1">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> Ready
-                </span>
               </div>
             </div>
 
             <!-- Area Video Live Stream Kamera Belakang Android -->
             <div id="camera-preview-wrapper" class="hidden relative rounded-xl overflow-hidden border-2 border-emerald-500 bg-black">
               <div id="qr-reader" class="w-full"></div>
-              <p class="text-[10px] text-center text-slate-400 py-1 bg-slate-950">Arahkan Barcode Kartu Pelajar ke Kamera Belakang</p>
+              <p class="text-[10px] text-center text-slate-300 py-1.5 bg-slate-950 font-mono">Arahkan Barcode Kartu Pelajar ke Kamera Belakang</p>
             </div>
 
             <div class="flex gap-2">
-              <input type="text" id="scan-input" onkeypress="handleScanKeyPress(event)" placeholder="Scan Barcode / No. Rekening / NIS Siswa..." class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
-              <button onclick="handleScanCard()" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-extrabold text-xs rounded-xl shadow transition">
+              <input type="text" id="scan-input" onkeypress="handleScanKeyPress(event)" placeholder="Scan Barcode / No. Rekening / NIS Siswa..." class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-3 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono">
+              <button onclick="handleScanCard()" class="px-4 py-3 bg-emerald-500 hover:bg-emerald-400 active-scale text-slate-900 font-extrabold text-xs rounded-xl shadow transition">
                 Scan / Tap
               </button>
             </div>
-            <p class="text-[11px] text-slate-400">Ketik NIS (cth: 2023001) atau gunakan USB Scanner / Kamera Belakang untuk otomatis memuat data nasabah.</p>
+            <p class="text-[10px] sm:text-[11px] text-slate-400">Ketik NIS (cth: 2023001) atau gunakan Scanner / Kamera Belakang untuk memuat data nasabah.</p>
           </div>
 
           <!-- Form Transaksi Teller -->
-          <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-4">
-            <h2 class="text-base font-bold text-slate-900 border-b border-slate-100 pb-3 flex justify-between items-center">
+          <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-sm space-y-4">
+            <h2 class="text-sm sm:text-base font-bold text-slate-900 border-b border-slate-100 pb-3 flex justify-between items-center">
               <span>Form Transaksi Tabungan Teller</span>
-              <span class="text-xs text-slate-400 font-normal">Petugas Teller: <strong class="text-slate-700">TLR01</strong></span>
+              <span class="text-xs text-slate-400 font-normal">Teller: <strong class="text-slate-700">TLR01</strong></span>
             </h2>
             <form onsubmit="handleTransactionSubmit(event)" class="space-y-4 text-xs">
               <div>
                 <label class="block font-bold text-slate-700 mb-1">Jenis Transaksi</label>
-                <select id="tx-type" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none">
+                <select id="tx-type" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none text-xs">
                   <option value="DEPOSIT">📥 SETOR TUNAI (DEPOSIT / KAS MASUK)</option>
                   <option value="WITHDRAWAL">📤 PENARIKAN TUNAI (WITHDRAWAL / KAS KELUAR)</option>
                 </select>
@@ -327,28 +375,28 @@
 
               <div>
                 <label class="block font-bold text-slate-700 mb-1">Siswa Terpilih</label>
-                <select id="tx-student-id" onchange="updateActiveStudentPreview()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none">
+                <select id="tx-student-id" onchange="updateActiveStudentPreview()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 font-bold text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none text-xs">
                 </select>
               </div>
 
               <div>
                 <label class="block font-bold text-slate-700 mb-1">Nominal Transaksi (Rp)</label>
-                <input type="number" id="tx-amount" required min="1000" step="1000" placeholder="Contoh: 50000" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-base font-bold text-emerald-700 focus:ring-2 focus:ring-emerald-500 outline-none">
-                <div class="flex flex-wrap gap-1.5 mt-2">
-                  <button type="button" onclick="setQuickAmount(5000)" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[10px] font-bold">+5rb</button>
-                  <button type="button" onclick="setQuickAmount(10000)" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[10px] font-bold">+10rb</button>
-                  <button type="button" onclick="setQuickAmount(20000)" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[10px] font-bold">+20rb</button>
-                  <button type="button" onclick="setQuickAmount(50000)" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[10px] font-bold">+50rb</button>
-                  <button type="button" onclick="setQuickAmount(100000)" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-[10px] font-bold">+100rb</button>
+                <input type="number" id="tx-amount" required min="1000" step="1000" placeholder="Contoh: 50000" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-base font-bold text-emerald-700 focus:ring-2 focus:ring-emerald-500 outline-none">
+                <div class="flex flex-wrap gap-1.5 mt-2.5">
+                  <button type="button" onclick="setQuickAmount(5000)" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 active-scale text-slate-700 rounded-xl text-xs font-bold flex-1 sm:flex-none">+5rb</button>
+                  <button type="button" onclick="setQuickAmount(10000)" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 active-scale text-slate-700 rounded-xl text-xs font-bold flex-1 sm:flex-none">+10rb</button>
+                  <button type="button" onclick="setQuickAmount(20000)" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 active-scale text-slate-700 rounded-xl text-xs font-bold flex-1 sm:flex-none">+20rb</button>
+                  <button type="button" onclick="setQuickAmount(50000)" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 active-scale text-slate-700 rounded-xl text-xs font-bold flex-1 sm:flex-none">+50rb</button>
+                  <button type="button" onclick="setQuickAmount(100000)" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 active-scale text-slate-700 rounded-xl text-xs font-bold flex-1 sm:flex-none">+100rb</button>
                 </div>
               </div>
 
               <div>
                 <label class="block font-bold text-slate-700 mb-1">Keterangan / Catatan</label>
-                <input type="text" id="tx-notes" placeholder="Contoh: Setoran harian / Uang saku..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800">
+                <input type="text" id="tx-notes" placeholder="Contoh: Setoran harian / Uang saku..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-800 text-xs">
               </div>
 
-              <button type="submit" class="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+              <button type="submit" class="w-full py-3.5 bg-emerald-500 hover:bg-emerald-600 active-scale text-slate-900 font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transition flex items-center justify-center gap-2">
                 ⚡ Proses Transaksi Sekarang
               </button>
             </form>
@@ -356,15 +404,15 @@
         </div>
 
         <!-- Panel Kanan: Preview Rekening Aktif & Mutasi Terakhir -->
-        <div class="space-y-6">
-          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm text-xs space-y-3">
+        <div class="space-y-4 sm:space-y-6">
+          <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm text-xs space-y-3">
             <h3 class="font-bold text-slate-900 text-sm border-b border-slate-100 pb-2">Informasi Rekening Aktif</h3>
             <div id="active-student-preview" class="space-y-3">
               <!-- Rendered via JS -->
             </div>
           </div>
 
-          <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm text-xs space-y-3">
+          <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-sm text-xs space-y-3">
             <div class="flex justify-between items-center border-b border-slate-100 pb-2">
               <h3 class="font-bold text-slate-900 text-sm">Mutasi Terakhir (Siswa Ini)</h3>
             </div>
@@ -378,53 +426,53 @@
 
     <!-- TAB 3: PVC ID CARD GENERATOR -->
     <div id="tab-card" class="tab-content space-y-6 hidden">
-      <div class="no-print bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+      <div class="no-print bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-4">
           <div>
-            <h2 class="text-lg font-bold text-slate-900">💳 Cetak Kartu Pelajar Smart Banking (PVC CR-80)</h2>
+            <h2 class="text-base sm:text-lg font-bold text-slate-900">💳 Cetak Kartu Pelajar Smart Banking (PVC CR-80)</h2>
             <p class="text-xs text-slate-500">Kartu Tanda Pelajar dilengkapi chip nfc/contactless dan barcode transaksi dinamis.</p>
           </div>
-          <button onclick="triggerPrint()" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-extrabold text-xs rounded-xl shadow-md transition">
+          <button onclick="triggerPrint()" class="w-full sm:w-auto px-5 py-3 bg-emerald-500 hover:bg-emerald-600 active-scale text-slate-900 font-extrabold text-xs rounded-xl shadow-md transition">
             🖨️ Cetak Kartu Fisik
           </button>
         </div>
 
         <div>
           <label class="block font-bold text-slate-700 mb-1 text-xs">Pilih Nasabah Siswa</label>
-          <select id="card-student-select" onchange="renderIDCard()" class="max-w-xs w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold text-xs text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none">
+          <select id="card-student-select" onchange="renderIDCard()" class="max-w-xs w-full bg-slate-50 border border-slate-200 rounded-xl p-3 font-bold text-xs text-slate-800 focus:ring-2 focus:ring-emerald-500 outline-none">
           </select>
         </div>
       </div>
 
-      <div class="flex flex-col md:flex-row justify-center items-center gap-8 py-6">
+      <div class="flex flex-col md:flex-row justify-center items-center gap-6 sm:gap-8 py-4 sm:py-6">
         <div>
           <p class="text-xs font-bold text-slate-500 text-center mb-2 no-print">TAMPILAN DEPAN (FRONT)</p>
-          <div id="card-front-container" class="shadow-2xl rounded-xl"></div>
+          <div id="card-front-container" class="shadow-2xl rounded-xl scale-95 sm:scale-100"></div>
         </div>
         <div>
           <p class="text-xs font-bold text-slate-500 text-center mb-2 no-print">TAMPILAN BELAKANG (BACK)</p>
-          <div id="card-back-container" class="shadow-2xl rounded-xl"></div>
+          <div id="card-back-container" class="shadow-2xl rounded-xl scale-95 sm:scale-100"></div>
         </div>
       </div>
     </div>
 
     <!-- TAB 4: DATABASE NASABAH SISWA -->
-    <div id="tab-students" class="tab-content space-y-6 hidden no-print">
-      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+    <div id="tab-students" class="tab-content space-y-4 sm:space-y-6 hidden">
+      <div class="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h2 class="text-lg font-bold text-slate-900">Data Nasabah Siswa & Kartu Pelajar</h2>
+            <h2 class="text-base sm:text-lg font-bold text-slate-900">Data Nasabah Siswa & Kartu Pelajar</h2>
             <p class="text-xs text-slate-500">Daftar siswa terdaftar beserta foto profil JPG resmi & format kelas custom.</p>
           </div>
-          <button onclick="openModalNewStudent()" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-bold text-xs rounded-xl flex items-center gap-2 shadow">
+          <button onclick="openModalNewStudent()" class="w-full sm:w-auto px-4 py-3 bg-emerald-500 hover:bg-emerald-600 active-scale text-slate-900 font-bold text-xs rounded-xl flex items-center justify-center gap-2 shadow">
             ➕ Buka Rekening & Upload Foto
           </button>
         </div>
 
         <!-- Filter & Search Bar -->
         <div class="flex flex-col sm:flex-row gap-3 text-xs">
-          <input type="text" id="search-student-input" placeholder="🔍 Cari berdasarkan Nama, NIS, atau No Rekening..." class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2">
-          <select id="filter-class-select" onchange="currentPage=1; renderStudentsTable();" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 font-bold text-slate-700">
+          <input type="text" id="search-student-input" placeholder="🔍 Cari berdasarkan Nama, NIS, atau No Rekening..." class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs">
+          <select id="filter-class-select" onchange="currentPage=1; renderStudentsTable();" class="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 font-bold text-slate-700 text-xs">
             <option value="ALL">Semua Kelas</option>
           </select>
         </div>
@@ -432,7 +480,7 @@
         <div class="overflow-x-auto rounded-xl border border-slate-100">
           <table class="w-full text-left border-collapse">
             <thead>
-              <tr class="bg-slate-50 text-[11px] uppercase font-bold text-slate-500 tracking-wider">
+              <tr class="bg-slate-50 text-[10px] sm:text-[11px] uppercase font-bold text-slate-500 tracking-wider">
                 <th class="p-3">Foto</th>
                 <th class="p-3">No. Rekening & NIS</th>
                 <th class="p-3">Nama Lengkap Siswa</th>
@@ -450,40 +498,40 @@
     </div>
 
     <!-- TAB 5: REPORTS & ANALYTICS -->
-    <div id="tab-reports" class="tab-content space-y-6 hidden no-print">
-      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+    <div id="tab-reports" class="tab-content space-y-4 sm:space-y-6 hidden no-print">
+      <div class="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h2 class="text-lg font-bold text-slate-900">📊 Laporan & Rekapitulasi Keuangan Tabungan</h2>
+            <h2 class="text-base sm:text-lg font-bold text-slate-900">📊 Laporan & Rekapitulasi Keuangan Tabungan</h2>
             <p class="text-xs text-slate-500">Ringkasan total kas, statistik per kelas, dan ekspor data ke Excel / CSV.</p>
           </div>
-          <div class="flex items-center gap-2">
-            <button onclick="exportToCSV('students')" class="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl border border-slate-300 transition">
-              📥 Ekspor Data Nasabah (CSV)
+          <div class="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
+            <button onclick="exportToCSV('students')" class="w-full sm:w-auto px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl border border-slate-300 transition">
+              📥 Ekspor Nasabah (CSV)
             </button>
-            <button onclick="exportToCSV('transactions')" class="px-3.5 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-extrabold text-xs rounded-xl shadow transition">
+            <button onclick="exportToCSV('transactions')" class="w-full sm:w-auto px-3.5 py-2.5 bg-emerald-500 hover:bg-emerald-400 active-scale text-slate-900 font-extrabold text-xs rounded-xl shadow transition">
               📥 Ekspor Mutasi (CSV)
             </button>
           </div>
         </div>
 
         <!-- Summary Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
-          <div class="bg-emerald-900 text-white p-4 rounded-xl border border-emerald-800 shadow-sm">
-            <p class="text-[11px] text-emerald-300 font-bold uppercase">Total Kas Tabungan</p>
-            <p id="report-total-kas" class="text-xl font-black text-emerald-100 mt-1">Rp 0</p>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 text-xs">
+          <div class="bg-emerald-900 text-white p-3.5 sm:p-4 rounded-xl border border-emerald-800 shadow-sm">
+            <p class="text-[10px] sm:text-[11px] text-emerald-300 font-bold uppercase">Total Kas Tabungan</p>
+            <p id="report-total-kas" class="text-base sm:text-xl font-black text-emerald-100 mt-1">Rp 0</p>
           </div>
-          <div class="bg-slate-900 text-white p-4 rounded-xl border border-slate-800 shadow-sm">
-            <p class="text-[11px] text-slate-400 font-bold uppercase">Total Nasabah Siswa</p>
-            <p id="report-total-nasabah" class="text-xl font-black text-white mt-1">0 Siswa</p>
+          <div class="bg-slate-900 text-white p-3.5 sm:p-4 rounded-xl border border-slate-800 shadow-sm">
+            <p class="text-[10px] sm:text-[11px] text-slate-400 font-bold uppercase">Total Nasabah Siswa</p>
+            <p id="report-total-nasabah" class="text-base sm:text-xl font-black text-white mt-1">0 Siswa</p>
           </div>
-          <div class="bg-blue-900 text-white p-4 rounded-xl border border-blue-800 shadow-sm">
-            <p class="text-[11px] text-blue-300 font-bold uppercase">Total Akumulasi Setoran</p>
-            <p id="report-total-setor" class="text-xl font-black text-blue-100 mt-1">Rp 0</p>
+          <div class="bg-blue-900 text-white p-3.5 sm:p-4 rounded-xl border border-blue-800 shadow-sm">
+            <p class="text-[10px] sm:text-[11px] text-blue-300 font-bold uppercase">Akumulasi Setoran</p>
+            <p id="report-total-setor" class="text-base sm:text-xl font-black text-blue-100 mt-1">Rp 0</p>
           </div>
-          <div class="bg-amber-950 text-white p-4 rounded-xl border border-amber-800 shadow-sm">
-            <p class="text-[11px] text-amber-300 font-bold uppercase">Total Akumulasi Penarikan</p>
-            <p id="report-total-tarik" class="text-xl font-black text-amber-100 mt-1">Rp 0</p>
+          <div class="bg-amber-950 text-white p-3.5 sm:p-4 rounded-xl border border-amber-800 shadow-sm">
+            <p class="text-[10px] sm:text-[11px] text-amber-300 font-bold uppercase">Akumulasi Penarikan</p>
+            <p id="report-total-tarik" class="text-base sm:text-xl font-black text-amber-100 mt-1">Rp 0</p>
           </div>
         </div>
 
@@ -511,9 +559,9 @@
 
     <!-- TAB 6: DESIGN & BRANDING EDITOR -->
     <div id="tab-design" class="tab-content space-y-6 hidden no-print">
-      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+      <div class="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
         <div>
-          <h2 class="text-lg font-bold text-slate-900">🎨 Editor Desain & Logo Lembaga / Sekolah</h2>
+          <h2 class="text-base sm:text-lg font-bold text-slate-900">🎨 Editor Desain & Logo Lembaga / Sekolah</h2>
           <p class="text-xs text-slate-500">Upload logo lembaga resmi berformat JPG/PNG dan sesuaikan tema visual serta teks kartu PVC.</p>
         </div>
 
@@ -530,7 +578,7 @@
                 </div>
                 <div class="flex-1 space-y-1">
                   <input type="file" id="upload-logo-input" accept="image/jpeg, image/jpg, image/png" onchange="handleLogoUpload(event)" class="hidden">
-                  <button type="button" onclick="document.getElementById('upload-logo-input').click()" class="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs transition">
+                  <button type="button" onclick="document.getElementById('upload-logo-input').click()" class="px-3.5 py-2.5 bg-slate-900 hover:bg-slate-800 active-scale text-white font-bold rounded-xl text-xs transition">
                     📁 Upload Logo JPG / PNG...
                   </button>
                   <p class="text-[10px] text-slate-400">Rekomendasi rasio 1:1 transparan atau latar putih.</p>
@@ -541,56 +589,56 @@
             <div>
               <label class="block font-bold text-slate-700 mb-1">Tema Warna Sampul Buku</label>
               <div class="grid grid-cols-4 gap-2">
-                <button onclick="setTheme('theme-green')" class="py-2.5 bg-emerald-800 text-amber-300 font-bold rounded-lg text-[10px] border border-amber-400 shadow-sm hover:scale-105 transition">Hijau Emas</button>
-                <button onclick="setTheme('theme-blue')" class="py-2.5 bg-blue-900 text-blue-200 font-bold rounded-lg text-[10px] border border-blue-400 shadow-sm hover:scale-105 transition">Biru Modern</button>
-                <button onclick="setTheme('theme-maroon')" class="py-2.5 bg-red-950 text-yellow-200 font-bold rounded-lg text-[10px] border border-yellow-400 shadow-sm hover:scale-105 transition">Marun Emas</button>
-                <button onclick="setTheme('theme-black')" class="py-2.5 bg-slate-950 text-amber-400 font-bold rounded-lg text-[10px] border border-amber-500 shadow-sm hover:scale-105 transition">Hitam Elegan</button>
+                <button onclick="setTheme('theme-green')" class="py-2.5 bg-emerald-800 text-amber-300 font-bold rounded-lg text-[10px] border border-amber-400 shadow-sm active-scale transition">Hijau Emas</button>
+                <button onclick="setTheme('theme-blue')" class="py-2.5 bg-blue-900 text-blue-200 font-bold rounded-lg text-[10px] border border-blue-400 shadow-sm active-scale transition">Biru Modern</button>
+                <button onclick="setTheme('theme-maroon')" class="py-2.5 bg-red-950 text-yellow-200 font-bold rounded-lg text-[10px] border border-yellow-400 shadow-sm active-scale transition">Marun Emas</button>
+                <button onclick="setTheme('theme-black')" class="py-2.5 bg-slate-950 text-amber-400 font-bold rounded-lg text-[10px] border border-amber-500 shadow-sm active-scale transition">Hitam Elegan</button>
               </div>
             </div>
 
             <div>
               <label class="block font-bold text-slate-700 mb-1">Nama Bank Sekolah</label>
-              <input type="text" id="design-bank-name" value="BANK TABUNGAN SEKOLAH" oninput="updateDesignSettings()" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 font-bold text-slate-800">
+              <input type="text" id="design-bank-name" value="BANK TABUNGAN SEKOLAH" oninput="updateDesignSettings()" class="w-full bg-white border border-slate-200 rounded-xl p-3 font-bold text-slate-800 text-xs">
             </div>
 
             <div>
               <label class="block font-bold text-slate-700 mb-1">Sub-Judul / Nama Instansi Sekolah</label>
-              <input type="text" id="design-school-name" value="SD NEGERI HARAPAN BANGSA" oninput="updateDesignSettings()" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 font-bold text-slate-800">
+              <input type="text" id="design-school-name" value="SD NEGERI HARAPAN BANGSA" oninput="updateDesignSettings()" class="w-full bg-white border border-slate-200 rounded-xl p-3 font-bold text-slate-800 text-xs">
             </div>
 
             <div>
               <label class="block font-bold text-slate-700 mb-1">Nama Kepala Sekolah / Pejabat</label>
-              <input type="text" id="design-headmaster" value="Drs. H. Suparna, M.Pd" oninput="updateDesignSettings()" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 font-bold text-slate-800">
+              <input type="text" id="design-headmaster" value="Drs. H. Suparna, M.Pd" oninput="updateDesignSettings()" class="w-full bg-white border border-slate-200 rounded-xl p-3 font-bold text-slate-800 text-xs">
             </div>
 
             <h3 class="font-bold text-slate-800 text-sm border-b border-slate-200 pb-2 pt-2">Custom Teks Kartu Pelajar PVC</h3>
 
             <div>
               <label class="block font-bold text-slate-700 mb-1">Judul Kartu Depan</label>
-              <input type="text" id="design-card-title" value="KARTU TANDA PELAJAR" oninput="updateDesignSettings()" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 font-bold text-slate-800">
+              <input type="text" id="design-card-title" value="KARTU TANDA PELAJAR" oninput="updateDesignSettings()" class="w-full bg-white border border-slate-200 rounded-xl p-3 font-bold text-slate-800 text-xs">
             </div>
 
             <div>
               <label class="block font-bold text-slate-700 mb-1">Badge Header Kanan Depan</label>
-              <input type="text" id="design-card-tag" value="SMART CARD" oninput="updateDesignSettings()" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 font-bold text-slate-800">
+              <input type="text" id="design-card-tag" value="SMART CARD" oninput="updateDesignSettings()" class="w-full bg-white border border-slate-200 rounded-xl p-3 font-bold text-slate-800 text-xs">
             </div>
 
             <div>
               <label class="block font-bold text-slate-700 mb-1">Jabatan Penandatangan Kartu Belakang</label>
-              <input type="text" id="design-signatory-title" value="Kepala Sekolah," oninput="updateDesignSettings()" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 font-bold text-slate-800">
+              <input type="text" id="design-signatory-title" value="Kepala Sekolah," oninput="updateDesignSettings()" class="w-full bg-white border border-slate-200 rounded-xl p-3 font-bold text-slate-800 text-xs">
             </div>
 
             <div>
               <label class="block font-bold text-slate-700 mb-1">Ketentuan Kartu Belakang - Baris 1</label>
-              <input type="text" id="design-rule-1" value="1. Kartu ini sah sebagai Kartu Pelajar & Kartu Tabungan Bank Sekolah." oninput="updateDesignSettings()" class="w-full bg-white border border-slate-200 rounded-xl p-2 text-[11px]">
+              <input type="text" id="design-rule-1" value="1. Kartu ini sah sebagai Kartu Pelajar & Kartu Tabungan Bank Sekolah." oninput="updateDesignSettings()" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-[11px]">
             </div>
             <div>
               <label class="block font-bold text-slate-700 mb-1">Ketentuan Kartu Belakang - Baris 2</label>
-              <input type="text" id="design-rule-2" value="2. Apabila menemukan kartu ini, harap mengembalikan ke pihak sekolah." oninput="updateDesignSettings()" class="w-full bg-white border border-slate-200 rounded-xl p-2 text-[11px]">
+              <input type="text" id="design-rule-2" value="2. Apabila menemukan kartu ini, harap mengembalikan ke pihak sekolah." oninput="updateDesignSettings()" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-[11px]">
             </div>
             <div>
               <label class="block font-bold text-slate-700 mb-1">Ketentuan Kartu Belakang - Baris 3</label>
-              <input type="text" id="design-rule-3" value="3. Dilarang menyalahgunakan kartu untuk transaksi di luar ketentuan." oninput="updateDesignSettings()" class="w-full bg-white border border-slate-200 rounded-xl p-2 text-[11px]">
+              <input type="text" id="design-rule-3" value="3. Dilarang menyalahgunakan kartu untuk transaksi di luar ketentuan." oninput="updateDesignSettings()" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-[11px]">
             </div>
           </div>
 
@@ -634,8 +682,8 @@
 
   <!-- MODAL: RECEIPT & TRANSACTION RESULT -->
   <div id="modal-receipt" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden no-print">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl relative text-xs space-y-4">
-      <button onclick="closeModalReceipt()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600 font-bold text-base">✕</button>
+    <div class="bg-white rounded-2xl max-w-sm w-full p-5 sm:p-6 shadow-2xl relative text-xs space-y-4 max-h-[90vh] overflow-y-auto">
+      <button onclick="closeModalReceipt()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600 font-bold text-base p-1">✕</button>
 
       <div class="text-center">
         <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-xl mx-auto mb-2">
@@ -649,13 +697,13 @@
       </div>
 
       <div class="flex flex-col gap-2">
-        <button onclick="sendDirectWhatsAppToRegistered()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold rounded-xl shadow transition flex items-center justify-center gap-2">
+        <button onclick="sendDirectWhatsAppToRegistered()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 active-scale text-white font-extrabold rounded-xl shadow transition flex items-center justify-center gap-2 text-xs">
           🚀 Kirim Slip Gambar ke WA
         </button>
-        <button onclick="printThermalReceipt()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl shadow transition flex items-center justify-center gap-2">
+        <button onclick="printThermalReceipt()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 active-scale text-white font-bold rounded-xl shadow transition flex items-center justify-center gap-2 text-xs">
           🖨️ Cetak Struk Thermal (58mm)
         </button>
-        <button onclick="closeModalReceipt(); switchTab('passbook');" class="w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl transition">
+        <button onclick="closeModalReceipt(); switchTab('passbook');" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl transition text-xs">
           📖 Cetak Langsung ke Buku Bank
         </button>
       </div>
@@ -664,8 +712,8 @@
 
   <!-- MODAL: WHATSAPP NOTIFICATION SLIP -->
   <div id="modal-whatsapp" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden no-print">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative text-xs space-y-4">
-      <button onclick="closeWhatsAppModal()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600 font-bold text-base">✕</button>
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl relative text-xs space-y-4 max-h-[90vh] overflow-y-auto">
+      <button onclick="closeWhatsAppModal()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600 font-bold text-base p-1">✕</button>
 
       <div>
         <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">💬 Kirim Slip Gambar WhatsApp</h3>
@@ -675,7 +723,7 @@
       <div class="space-y-3">
         <div>
           <label class="block font-bold text-slate-700 mb-1">Nomor WhatsApp Tujuan</label>
-          <input type="text" id="wa-phone-input" placeholder="081234567890" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-mono text-xs">
+          <input type="text" id="wa-phone-input" placeholder="081234567890" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 font-mono text-xs">
         </div>
 
         <div>
@@ -687,14 +735,14 @@
       </div>
 
       <div class="pt-2 flex flex-col gap-2">
-        <button onclick="sendWhatsAppMessage()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold rounded-xl shadow transition flex items-center justify-center gap-2">
+        <button onclick="sendWhatsAppMessage()" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 active-scale text-white font-extrabold rounded-xl shadow transition flex items-center justify-center gap-2 text-xs">
           🚀 Kirim Slip Gambar ke WhatsApp
         </button>
         <div class="flex gap-2">
-          <button onclick="copyReceiptImageToClipboard()" class="flex-1 py-2 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition">
-            📋 Salin Gambar Slip
+          <button onclick="copyReceiptImageToClipboard()" class="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-white font-bold rounded-xl transition text-xs">
+            📋 Salin Gambar
           </button>
-          <button onclick="downloadReceiptImage()" class="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl transition">
+          <button onclick="downloadReceiptImage()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl transition text-xs">
             💾 Unduh Gambar
           </button>
         </div>
@@ -704,8 +752,8 @@
 
   <!-- MODAL: CLOUD SYNC SETTINGS -->
   <div id="modal-sync" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden no-print">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative text-xs space-y-4">
-      <button onclick="closeModalSync()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600 font-bold text-base">✕</button>
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl relative text-xs space-y-4">
+      <button onclick="closeModalSync()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600 font-bold text-base p-1">✕</button>
 
       <div>
         <h3 class="text-base font-bold text-slate-900">☁️ Connect Cloud Backend (Google Sheets / API)</h3>
@@ -715,15 +763,15 @@
       <div class="space-y-3">
         <div>
           <label class="block font-bold text-slate-700 mb-1">Web App / API URL</label>
-          <input type="text" id="sync-gas-url" placeholder="https://script.google.com/macros/s/.../exec atau http://localhost/tabungku/api.php" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-mono text-[11px]">
+          <input type="text" id="sync-gas-url" placeholder="https://script.google.com/macros/s/.../exec atau http://192.168.1.100/tabungku/api.php" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 font-mono text-[11px]">
         </div>
       </div>
 
       <div class="pt-2 flex gap-2">
-        <button onclick="pullDataFromCloud()" class="flex-1 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition">
+        <button onclick="pullDataFromCloud()" class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 active-scale text-white font-bold rounded-xl transition text-xs">
           🔄 Pull Data Cloud
         </button>
-        <button onclick="saveSyncSettings()" class="flex-1 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-extrabold rounded-xl shadow transition">
+        <button onclick="saveSyncSettings()" class="flex-1 py-3 bg-emerald-500 hover:bg-emerald-600 active-scale text-slate-900 font-extrabold rounded-xl shadow transition text-xs">
           💾 Simpan & Hubungkan
         </button>
       </div>
@@ -732,12 +780,12 @@
 
   <!-- MODAL: FORM SISWA BARU / EDIT -->
   <div id="modal-new-student" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden no-print">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto text-xs space-y-4">
-      <button onclick="closeModalNewStudent()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600 font-bold text-base">✕</button>
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto text-xs space-y-4">
+      <button onclick="closeModalNewStudent()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600 font-bold text-base p-1">✕</button>
 
       <div>
         <h3 id="modal-student-title" class="text-base font-bold text-slate-900">Buka Rekening & Upload Foto Siswa</h3>
-        <p class="text-xs text-slate-500">Foto profil di-kompres otomatis untuk menjaga performa cepat.</p>
+        <p class="text-xs text-slate-500">Foto profil di-kompres otomatis untuk menjaga performa cepat di HP.</p>
       </div>
 
       <form onsubmit="handleNewStudentSubmit(event)" class="space-y-3">
@@ -751,7 +799,7 @@
             </div>
             <div class="flex-1 space-y-1">
               <input type="file" id="upload-photo-input" accept="image/jpeg, image/jpg, image/png" onchange="handleFileChange(event)" class="hidden">
-              <button type="button" onclick="document.getElementById('upload-photo-input').click()" class="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs transition">
+              <button type="button" onclick="document.getElementById('upload-photo-input').click()" class="px-3.5 py-2.5 bg-slate-900 hover:bg-slate-800 active-scale text-white font-bold rounded-xl text-xs transition">
                 📁 Pilih File Foto JPG...
               </button>
               <p class="text-[10px] text-slate-400">Otomatis di-kompresi agar memori ringan.</p>
@@ -761,43 +809,43 @@
 
         <div>
           <label class="block font-bold text-slate-700 mb-1">NIS (Nomor Induk Siswa)</label>
-          <input type="text" id="new-nis" required placeholder="Contoh: 2023006" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-mono">
+          <input type="text" id="new-nis" required placeholder="Contoh: 2023006" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 font-mono text-xs">
         </div>
 
         <div>
           <label class="block font-bold text-slate-700 mb-1">Nama Lengkap Siswa</label>
-          <input type="text" id="new-name" required placeholder="Contoh: Budi Gunawan" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5">
+          <input type="text" id="new-name" required placeholder="Contoh: Budi Gunawan" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs">
         </div>
 
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block font-bold text-slate-700 mb-1">Format Kelas (Custom)</label>
-            <input type="text" id="new-class" required placeholder="Contoh: VII-A / 10 IPA 2" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold text-emerald-700">
+            <input type="text" id="new-class" required placeholder="Contoh: VII-A / 10 IPA 2" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 font-bold text-emerald-700 text-xs">
           </div>
           <div>
             <label class="block font-bold text-slate-700 mb-1">No. WhatsApp Wali</label>
-            <input type="text" id="new-phone" placeholder="081234567890" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-mono">
+            <input type="text" id="new-phone" placeholder="081234567890" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 font-mono text-xs">
           </div>
         </div>
 
         <div>
           <label class="block font-bold text-slate-700 mb-1">Nama Wali / Orang Tua</label>
-          <input type="text" id="new-parent" placeholder="Nama Wali" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5">
+          <input type="text" id="new-parent" placeholder="Nama Wali" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs">
         </div>
 
         <div>
           <label class="block font-bold text-slate-700 mb-1">Alamat Tempat Tinggal</label>
-          <input type="text" id="new-address" placeholder="Jl. Melati No. 12 Depok" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5">
+          <input type="text" id="new-address" placeholder="Jl. Melati No. 12 Depok" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs">
         </div>
 
         <div id="initial-balance-container">
           <label class="block font-bold text-slate-700 mb-1">Setoran Awal (Rp)</label>
-          <input type="number" id="new-initial-balance" min="0" value="50000" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold text-emerald-600">
+          <input type="number" id="new-initial-balance" min="0" value="50000" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 font-bold text-emerald-600 text-xs">
         </div>
 
         <div class="pt-2 flex gap-2">
-          <button type="button" onclick="closeModalNewStudent()" class="flex-1 py-2.5 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200">Batal</button>
-          <button type="submit" class="flex-1 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-extrabold rounded-xl shadow-md">Simpan Nasabah</button>
+          <button type="button" onclick="closeModalNewStudent()" class="flex-1 py-3 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200 text-xs">Batal</button>
+          <button type="submit" class="flex-1 py-3 bg-emerald-500 hover:bg-emerald-600 active-scale text-slate-900 font-extrabold rounded-xl shadow-md text-xs">Simpan Nasabah</button>
         </div>
       </form>
     </div>
@@ -814,8 +862,8 @@
         <p id="confirm-message" class="text-xs text-slate-500 mt-1">Apakah Anda yakin ingin menghapus data ini?</p>
       </div>
       <div class="flex gap-2 pt-2">
-        <button id="btn-confirm-cancel" class="flex-1 py-2 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200">Batal</button>
-        <button id="btn-confirm-ok" class="flex-1 py-2 bg-red-600 text-white font-bold rounded-xl shadow hover:bg-red-700">Ya, Hapus</button>
+        <button id="btn-confirm-cancel" class="flex-1 py-2.5 bg-slate-100 text-slate-700 font-bold rounded-xl hover:bg-slate-200">Batal</button>
+        <button id="btn-confirm-ok" class="flex-1 py-2.5 bg-red-600 text-white font-bold rounded-xl shadow hover:bg-red-700">Ya, Hapus</button>
       </div>
     </div>
   </div>
@@ -824,7 +872,7 @@
   <canvas id="receipt-canvas" class="hidden"></canvas>
 
   <!-- Container Toast Notification -->
-  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none no-print">
+  <div id="toast-container" class="fixed bottom-16 sm:bottom-5 right-3 sm:right-5 z-50 flex flex-col gap-2 pointer-events-none no-print">
   </div>
 
   <!-- JAVASCRIPT ENGINE UTAMA -->
@@ -837,7 +885,7 @@
     function toggleAudio() {
       audioEnabled = !audioEnabled;
       const btn = document.getElementById('btn-sound-toggle');
-      btn.innerText = audioEnabled ? '🔊 Suara: ON' : '🔇 Suara: OFF';
+      btn.innerHTML = audioEnabled ? '🔊 <span class="hidden sm:inline">Suara: ON</span>' : '🔇 <span class="hidden sm:inline">Suara: OFF</span>';
       showToast(`Efek suara teller: ${audioEnabled ? 'ON' : 'OFF'}`);
     }
 
@@ -1067,10 +1115,10 @@
       const badge = document.getElementById('cloud-sync-badge');
       if (connected && gasWebAppUrl) {
         badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400"></span> Cloud Sync Active`;
-        badge.className = "cursor-pointer text-[10px] bg-slate-800 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/30 flex items-center gap-1 hover:bg-slate-700 transition";
+        badge.className = "cursor-pointer text-[9px] sm:text-[10px] bg-slate-800 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/30 flex items-center gap-1 hover:bg-slate-700 transition";
       } else {
         badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span> Offline/Local`;
-        badge.className = "cursor-pointer text-[10px] bg-slate-800 text-amber-400 px-2 py-0.5 rounded-full border border-amber-500/30 flex items-center gap-1 hover:bg-slate-700 transition";
+        badge.className = "cursor-pointer text-[9px] sm:text-[10px] bg-slate-800 text-amber-400 px-2 py-0.5 rounded-full border border-amber-500/30 flex items-center gap-1 hover:bg-slate-700 transition";
       }
     }
 
@@ -1132,7 +1180,7 @@
     }
 
     /* -------------------------------------------------------------------------- */
-    /* KOMPRESI GAMBAR OTOMATIS (Mencegah Memori Penuh / Lemot)                  */
+    /* KOMPRESI GAMBAR OTOMATIS                                                  */
     /* -------------------------------------------------------------------------- */
     function compressImage(file, maxWidth, maxHeight, quality, callback) {
       const reader = new FileReader();
@@ -1217,7 +1265,7 @@
     }
 
     /* -------------------------------------------------------------------------- */
-    /* TAB ROUTING                                                                */
+    /* TAB ROUTING (MOBILE BOTTOM NAV SUPPORT)                                    */
     /* -------------------------------------------------------------------------- */
     function switchTab(tabName) {
       if (isCameraActive && tabName !== 'transaction') {
@@ -1225,15 +1273,30 @@
       }
 
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      
+      // Update Desktop Nav
       document.querySelectorAll('.nav-tab').forEach(el => {
         el.classList.remove('bg-emerald-500/10', 'text-emerald-400', 'border', 'border-emerald-500/30');
         el.classList.add('text-slate-300');
       });
 
+      // Update Mobile Nav
+      document.querySelectorAll('.mob-nav-tab').forEach(el => {
+        el.classList.remove('text-emerald-400', 'bg-emerald-500/10');
+        el.classList.add('text-slate-400');
+      });
+
       document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+      
       const activeBtn = document.getElementById(`btn-tab-${tabName}`);
       if (activeBtn) {
         activeBtn.classList.add('bg-emerald-500/10', 'text-emerald-400', 'border', 'border-emerald-500/30');
+      }
+
+      const activeMobBtn = document.getElementById(`btn-mob-${tabName}`);
+      if (activeMobBtn) {
+        activeMobBtn.classList.remove('text-slate-400');
+        activeMobBtn.classList.add('text-emerald-400', 'bg-emerald-500/10');
       }
 
       if (tabName === 'passbook') renderPassbook();
@@ -1560,7 +1623,7 @@
       const btn = document.getElementById('btn-camera-toggle');
       wrapper.classList.remove('hidden');
       btn.innerHTML = '🛑 Stop Kamera';
-      btn.className = 'px-3 py-1 bg-red-600 hover:bg-red-500 text-white text-xs font-bold rounded-lg transition flex items-center gap-1';
+      btn.className = 'px-3 py-2 bg-red-600 hover:bg-red-500 active-scale text-white text-xs font-bold rounded-xl transition flex items-center gap-1 shadow';
 
       html5QrCodeScanner = new Html5Qrcode("qr-reader");
       const config = { fps: 10, qrbox: { width: 250, height: 150 } };
@@ -1592,7 +1655,7 @@
           if (wrapper) wrapper.classList.add('hidden');
           if (btn) {
             btn.innerHTML = '📷 Kamera Belakang';
-            btn.className = 'px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-lg transition flex items-center gap-1';
+            btn.className = 'px-3 py-2 bg-emerald-600 hover:bg-emerald-500 active-scale text-white text-xs font-bold rounded-xl transition flex items-center gap-1 shadow';
           }
         }).catch(err => console.error(err));
       }
@@ -1659,7 +1722,7 @@
       }
 
       const waBtnHtml = `
-        <button onclick="openWhatsAppModal('${student.id}')" title="Kirim Pesan WA ke Wali" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-[10px] transition flex items-center gap-1">
+        <button onclick="openWhatsAppModal('${student.id}')" title="Kirim Pesan WA ke Wali" class="px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 active-scale text-white font-bold rounded-xl text-[11px] transition flex items-center gap-1 shadow">
           💬 WA
         </button>
       `;
@@ -1683,7 +1746,6 @@
         </div>
       `;
 
-      // Hanya ambil 5 mutasi terbaru agar UI ringan
       const studentTx = transactions.filter(t => t.studentId === student.id).slice(-5).reverse();
       if (studentTx.length === 0) {
         recentBox.innerHTML = '<p class="text-slate-400 text-[11px]">Belum ada mutasi transaksi.</p>';
@@ -1694,11 +1756,11 @@
               <p class="font-bold text-[11px] text-slate-800">${t.type === 'DEPOSIT' ? '📥 Setor Tunai' : '📤 Penarikan'}</p>
               <p class="text-[9px] text-slate-400 font-mono">${t.date} ${t.time || ''} • ${t.teller}</p>
             </div>
-            <div class="text-right flex items-center gap-2">
+            <div class="text-right flex items-center gap-1.5">
               <span class="font-extrabold text-[11px] ${t.type === 'DEPOSIT' ? 'text-emerald-700' : 'text-red-600'}">
                 ${t.type === 'DEPOSIT' ? '+' : '-'}${formatRupiah(t.amount)}
               </span>
-              <button onclick="sendSingleTxWA('${t.id}')" title="Kirim Slip Gambar PNG via WA" class="px-1.5 py-0.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 rounded font-bold text-[10px]">
+              <button onclick="sendSingleTxWA('${t.id}')" title="Kirim Slip Gambar PNG via WA" class="px-2 py-1 bg-emerald-100 hover:bg-emerald-200 active-scale text-emerald-800 rounded-lg font-bold text-[10px]">
                 💬
               </button>
             </div>
@@ -1911,15 +1973,12 @@
       canvas.width = 600;
       canvas.height = 800;
 
-      // Background
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Header Banner
       ctx.fillStyle = '#064e3b';
       ctx.fillRect(0, 0, canvas.width, 140);
 
-      // Header Text
       ctx.fillStyle = '#fde047';
       ctx.font = 'bold 24px "Cinzel", serif';
       ctx.textAlign = 'center';
@@ -1933,7 +1992,6 @@
       ctx.fillStyle = '#a7f3d0';
       ctx.fillText('SLIP BUKTI TRANSAKSI TELLER RESMI', canvas.width / 2, 110);
 
-      // Content Box
       ctx.strokeStyle = '#cbd5e1';
       ctx.lineWidth = 2;
       ctx.strokeRect(30, 170, 540, 590);
@@ -1960,7 +2018,6 @@
       drawRow('TANGGAL/WAKTU', `${tx.date} ${tx.time || ''}`);
       drawRow('PETUGAS TELLER', tx.teller || 'TLR01');
 
-      // Divider Line
       ctx.beginPath();
       ctx.setLineDash([5, 5]);
       ctx.moveTo(60, y);
@@ -1969,7 +2026,6 @@
       ctx.setLineDash([]);
       y += 40;
 
-      // Transaction Summary Box
       ctx.fillStyle = tx.type === 'DEPOSIT' ? '#f0fdf4' : '#fef2f2';
       ctx.fillRect(60, y - 20, 480, 110);
       ctx.strokeStyle = tx.type === 'DEPOSIT' ? '#bbf7d0' : '#fecaca';
@@ -1985,7 +2041,6 @@
 
       drawRow('SALDO AKHIR', formatRupiah(tx.runningBalance), true);
 
-      // Stamp Box
       ctx.save();
       ctx.translate(380, 640);
       ctx.rotate(-0.1);
@@ -1999,7 +2054,6 @@
       ctx.fillText(designConfig.bankName.slice(0, 15), 75, 45);
       ctx.restore();
 
-      // Update Preview Image in Modal
       const dataUrl = canvas.toDataURL('image/png');
       const container = document.getElementById('wa-image-preview-container');
       container.innerHTML = `<img src="${dataUrl}" class="max-h-64 object-contain rounded-lg shadow-md border">`;
@@ -2022,19 +2076,17 @@
         if (!blob) return;
         const file = new File([blob], `Slip_TabungKu_${lastProcessedTx.tx.id}.png`, { type: 'image/png' });
 
-        // Mobile Native Sharing (Android / iOS)
         if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
           navigator.share({
             files: [file],
             title: `Slip Transaksi ${lastProcessedTx.student.name}`
           }).catch(err => console.log('Share canceled:', err));
         } else {
-          // Desktop Browser Fallback
           try {
             navigator.clipboard.write([
               new ClipboardItem({ 'image/png': blob })
             ]).then(() => {
-              showToast('Gambar Slip disalin ke Clipboard! Salin/Paste (Ctrl+V) di WhatsApp');
+              showToast('Gambar Slip disalin! Salin/Paste (Ctrl+V) di WhatsApp');
               window.open(`https://wa.me/${phone}`, '_blank');
             }).catch(err => {
               downloadReceiptImage();
@@ -2090,7 +2142,6 @@
           classes.map(c => `<option value="${c}" ${filterClass === c ? 'selected' : ''}>${c}</option>`).join('');
       }
 
-      // 1. Filter Data
       const filtered = activeStudents.filter(s => {
         const matchSearch = s.name.toLowerCase().includes(search) || 
                             s.nis.toLowerCase().includes(search) || 
@@ -2099,7 +2150,6 @@
         return matchSearch && matchClass;
       });
 
-      // 2. Paginasi Slice
       const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
       if (currentPage > totalPages) currentPage = totalPages;
       
@@ -2118,7 +2168,6 @@
         return;
       }
 
-      // 3. Render Baris Halaman Aktif
       tbody.innerHTML = paginatedItems.map(s => `
         <tr class="hover:bg-slate-50 transition-colors">
           <td class="p-3">
@@ -2137,19 +2186,19 @@
           <td class="p-3 font-black text-emerald-600 text-sm">${formatRupiah(s.balance)}</td>
           <td class="p-3 text-center">
             <div class="flex items-center justify-center gap-1.5">
-              <button onclick="openWhatsAppModal('${s.id}')" title="Kirim Slip / Info Saldo WA" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg text-xs transition">
+              <button onclick="openWhatsAppModal('${s.id}')" title="Kirim Slip / Info Saldo WA" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 active-scale text-white font-bold rounded-lg text-xs transition">
                 💬 WA
               </button>
-              <button onclick="selectStudentForPassbook('${s.id}')" title="Cetak Buku Tabungan" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-lg text-xs transition border border-emerald-200">
+              <button onclick="selectStudentForPassbook('${s.id}')" title="Cetak Buku Tabungan" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 active-scale text-emerald-700 font-bold rounded-lg text-xs transition border border-emerald-200">
                 📖 Buku
               </button>
-              <button onclick="selectStudentForCard('${s.id}')" title="Cetak Kartu Pelajar PVC" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold rounded-lg text-xs transition border border-blue-200">
+              <button onclick="selectStudentForCard('${s.id}')" title="Cetak Kartu Pelajar PVC" class="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 active-scale text-blue-700 font-bold rounded-lg text-xs transition border border-blue-200">
                 💳 Kartu
               </button>
-              <button onclick="editStudent('${s.id}')" title="Edit Data Siswa" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-lg text-xs transition">
+              <button onclick="editStudent('${s.id}')" title="Edit Data Siswa" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 active-scale text-slate-700 font-bold rounded-lg text-xs transition">
                 ✏️
               </button>
-              <button onclick="deleteStudent('${s.id}')" title="Hapus Nasabah" class="px-2 py-1 bg-red-50 hover:bg-red-100 text-red-600 font-bold rounded-lg text-xs transition">
+              <button onclick="deleteStudent('${s.id}')" title="Hapus Nasabah" class="px-2 py-1 bg-red-50 hover:bg-red-100 active-scale text-red-600 font-bold rounded-lg text-xs transition">
                 🗑️
               </button>
             </div>
@@ -2171,11 +2220,11 @@
       }
 
       navContainer.innerHTML = `
-        <div>Menampilkan ${Math.min(itemsPerPage, totalData)} dari total ${totalData} nasabah</div>
-        <div class="flex gap-2">
-          <button onclick="changePage(-1)" ${currentPage === 1 ? 'disabled class="opacity-40 cursor-not-allowed px-3 py-1.5 bg-slate-100 rounded-lg"' : 'class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 rounded-lg text-slate-800"'}>❮ Prev</button>
-          <span class="px-3 py-1.5 bg-emerald-100 text-emerald-800 rounded-lg font-extrabold">Hal ${currentPage} / ${totalPages}</span>
-          <button onclick="changePage(1)" ${currentPage >= totalPages ? 'disabled class="opacity-40 cursor-not-allowed px-3 py-1.5 bg-slate-100 rounded-lg"' : 'class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 rounded-lg text-slate-800"'}>Next ❯</button>
+        <div>Menampilkan ${Math.min(itemsPerPage, totalData)} dari ${totalData} nasabah</div>
+        <div class="flex gap-1.5">
+          <button onclick="changePage(-1)" ${currentPage === 1 ? 'disabled class="opacity-40 cursor-not-allowed px-3 py-1.5 bg-slate-100 rounded-lg"' : 'class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 rounded-lg text-slate-800 active-scale"'}>❮ Prev</button>
+          <span class="px-3 py-1.5 bg-emerald-100 text-emerald-800 rounded-lg font-extrabold">${currentPage}/${totalPages}</span>
+          <button onclick="changePage(1)" ${currentPage >= totalPages ? 'disabled class="opacity-40 cursor-not-allowed px-3 py-1.5 bg-slate-100 rounded-lg"' : 'class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 rounded-lg text-slate-800 active-scale"'}>Next ❯</button>
         </div>
       `;
     }
@@ -2185,7 +2234,6 @@
       renderStudentsTable();
     }
 
-    // Debounce Helper
     function debounce(func, timeout = 300) {
       let timer;
       return (...args) => {
@@ -2415,15 +2463,19 @@
       let csvContent = "data:text/csv;charset=utf-8,";
       
       if (type === 'students') {
-        csvContent += "ID Nasabah,NIS,No Rekening,Nama Lengkap,Kelas,Saldo,Status,Wali,No WA,Alamat\n";
+        csvContent += "ID Nasabah,NIS,No Rekening,Nama Lengkap,Kelas,Saldo,Status,Wali,No WA,Alamat
+";
         students.forEach(s => {
-          csvContent += `"${s.id}","${s.nis}","${s.accountNo}","${s.name}","${s.class}",${s.balance},"${s.status || 'AKTIF'}","${s.parentName}","${s.phone || ''}","${s.address}"\n`;
+          csvContent += `"${s.id}","${s.nis}","${s.accountNo}","${s.name}","${s.class}",${s.balance},"${s.status || 'AKTIF'}","${s.parentName}","${s.phone || ''}","${s.address}"
+`;
         });
       } else {
-        csvContent += "ID Transaksi,Tanggal,Waktu,ID Nasabah,Nama Siswa,Jenis,Nominal,Saldo Berjalan,Teller,Catatan\n";
+        csvContent += "ID Transaksi,Tanggal,Waktu,ID Nasabah,Nama Siswa,Jenis,Nominal,Saldo Berjalan,Teller,Catatan
+";
         transactions.forEach(t => {
           const s = students.find(st => st.id === t.studentId) || {};
-          csvContent += `"${t.id}","${t.date}","${t.time || ''}","${t.studentId}","${s.name || ''}","${t.type}",${t.amount},${t.runningBalance},"${t.teller}","${t.notes || ''}"\n`;
+          csvContent += `"${t.id}","${t.date}","${t.time || ''}","${t.studentId}","${s.name || ''}","${t.type}",${t.amount},${t.runningBalance},"${t.teller}","${t.notes || ''}"
+`;
         });
       }
 
@@ -2447,6 +2499,11 @@
       renderIDCard();
       renderStudentsTable();
       updateTransactionDropdowns();
+
+      // Inisialisasi default tab untuk Android (Teller Tab) jika dibuka dari smartphone
+      if (window.innerWidth < 768) {
+        switchTab('transaction');
+      }
 
       const searchInput = document.getElementById('search-student-input');
       if (searchInput) {
